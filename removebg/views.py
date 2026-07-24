@@ -1,10 +1,13 @@
 import io
 from PIL import Image
-from rembg import remove
+from rembg import remove, new_session  # new_session ইমপোর্ট করুন
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponse
+
+# হালকা মডেলের জন্য গ্লোবাল সেশন তৈরি (u2netp মডেলটি মেমরি অনেক কম নেয়)
+session = new_session("u2netp")
 
 class RemoveBackgroundView(APIView):
     def post(self, request, *args, **kwargs):
@@ -15,7 +18,9 @@ class RemoveBackgroundView(APIView):
         
         try:
             input_image = Image.open(uploaded_file)
-            output_image = remove(input_image)
+            
+            # session=session প্যারামিটারটি দিয়ে কম মেমরির মডেল ব্যবহার নিশ্চিত করা হলো
+            output_image = remove(input_image, session=session)
             
             img_byte_arr = io.BytesIO()
             output_image.save(img_byte_arr, format='PNG')
