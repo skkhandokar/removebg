@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import RemoveBackgroundView
+from .views import PdfConvertView
 
 urlpatterns = [
-    path('remove-bg/', RemoveBackgroundView.as_view(), name='remove-bg'),
+    path('convert/', PdfConvertView.as_view(), name='pdf-convert'),
 ]
