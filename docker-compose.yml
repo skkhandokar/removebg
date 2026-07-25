@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # 1. Django REST API Backend
+  backend:
+    build: ./backend  # আপনার Django প্রজেক্ট ফোল্ডারের নাম
+    container_name: shortfy_django_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  # 2. Next.js Frontend (Optional)
+  frontend:
+    build: ./frontend # আপনার Next.js প্রজেক্ট ফোল্ডারের নাম
+    container_name: shortfy_next_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_DJANGO_API_URL=http://localhost:8000/api
+    depends_on:
+      - backend
